@@ -11,7 +11,7 @@ nok_message=`echo -e "\E[31mNOK\E[0m"`
 # This function will check root filesystem usage
 check_root_fs()
 {
-  usage=`df -hP /|grep -v "^Filesystem"|awk {'print $(NF-1)'}|tr -d %|cut -d. -f1`
+  usage=`df -hP /|grep -v "^Filesystem"|awk {'print $(NF-1)'}|tr -d %`
 }
 
 # This function will check memory usage

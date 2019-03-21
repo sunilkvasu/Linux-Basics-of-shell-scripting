@@ -31,7 +31,6 @@ check_cpu()
 # This is the main function, which calsl other functions and make the logic
 main()
 {
-clear
 printf "\t ====== REPORT BEGINS HERE ======\n"
 for host in `cat /tmp/hosts`; do
   printf "\t $host \n"
@@ -54,4 +53,5 @@ echo;echo;echo
 }
 
 # Here we call our main function
+clear
 main

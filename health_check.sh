@@ -4,6 +4,9 @@
 # Here we declare some variables
 host_list="/tmp/hosts"
 checks="check_root_fs check_mem check_cpu"
+ok_message=`echo -e "\E[32mOK\E[0m"`
+nok_message=`echo -e "\E[31mNOK\E[0m"`
+
 
 # This function will check root filesystem usage
 check_root_fs()
@@ -28,17 +31,26 @@ check_cpu()
 # This is the main function, which calsl other functions and make the logic
 main()
 {
+clear
+printf "\t ====== REPORT BEGINS HERE ======\n"
 for host in `cat /tmp/hosts`; do
-  echo $host
+  printf "\t $host \n"
+  printf "\t --------- \n"
   for check in $checks; do
     $check
     if [ $usage -ge 90 ];then
-      echo "$check is NOT OK"
+      printf "\t $check is $nok_message \n"
       else
-      echo "$check is OK"
+      printf "\t $check is $ok_message \n"
     fi
   done
 done
+printf "\t ======= REPORT END HERE=======\n"
+echo;echo;echo
+echo "Thanks for watching this video..!!"
+echo
+echo "Please click the subscribe button for more videos..!!"
+echo;echo;echo
 }
 
 # Here we call our main function

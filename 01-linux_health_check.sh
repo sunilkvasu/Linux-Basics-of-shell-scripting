@@ -11,21 +11,21 @@ nok_message=`echo -e "\E[31mNOK\E[0m"`
 # This function will check root filesystem usage
 check_root_fs()
 {
-  usage=`df -hP /|grep -v "^Filesystem"|awk {'print $(NF-1)'}|tr -d %`
+  usage=`ssh $1 df -hP / 2>/dev/null|grep -v "^Filesystem"|awk {'print $(NF-1)'}|tr -d %`
 }
 
 # This function will check memory usage
 check_mem()
 {
-  mem_total=`free -m|grep "^Mem"|awk {'print $2'}`
-  mem_used=`free -m|grep "^Mem"|awk {'print $3'}`
+  mem_total=`ssh $1 free -m 2>/dev/null|grep "^Mem"|awk {'print $2'}`
+  mem_used=`ssh $1 free -m 2>/dev/null|grep "^Mem"|awk {'print $3'}`
   usage=`echo "scale=4;$mem_used/$mem_total*100"|bc|cut -d. -f1`
 }
 
 # This function will check cpu usage
 check_cpu()
 {
-  usage=`grep 'cpu ' /proc/stat | awk '{sum=($2+$4)*100/($2+$4+$5)} END {print sum "%"}'|cut -d. -f1`
+  usage=`ssh $1 grep 'cpu ' /proc/stat 2>/dev/null| awk '{sum=($2+$4)*100/($2+$4+$5)} END {print sum "%"}'|cut -d. -f1`
 }
 
 # This is the main function, which calsl other functions and make the logic
@@ -36,7 +36,7 @@ for host in `cat /tmp/hosts`; do
   printf "\t $host \n"
   printf "\t --------- \n"
   for check in $checks; do
-    $check
+    $check $host
     if [ $usage -ge 90 ];then
       printf "\t $check is $nok_message \n"
       else
